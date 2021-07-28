@@ -1,4 +1,3 @@
-
 class RowContent < SitePrism::Section
 	elements :brand_names, 'span.title-span'
 
@@ -9,7 +8,6 @@ class RowContent < SitePrism::Section
 	def brand_title
 		brand_names.map(&:text)
 	end
-
 end
 
 class BrandList < SitePrism::Page
@@ -44,9 +42,10 @@ class BrandList < SitePrism::Page
 	end
 	
 	def title
-  	data = rows.map{|el| el.brand_title }
-  	data.flatten
+		data = rows.map{|el| el.brand_title }
+		data.flatten
 	end
+
 	def clear_filter
 		filter.set(nil)
 	end
