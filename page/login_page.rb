@@ -12,3 +12,4 @@ class LoginPage < SitePrism::Page
 			sleep 20
 		end
 end
+
