@@ -1,4 +1,5 @@
 require_relative '../.././page/login_page.rb'
+require_relative '../.././page/home.rb'
 require_relative '../.././page/brand_list.rb'
 
 describe 'Brands' do
@@ -7,8 +8,10 @@ describe 'Brands' do
 		obj.load
 		sleep 40
 		obj.login('turneruser@turner.com', 'turnertest')
+		home = HomePage.new
+		home.click_item('Brands')
 		page = BrandList.new
-		page.click_item('Brands')
+		page.brand?('Full Frontal with Samantha Bee')
 		expect(page.display_count).to eq '6'
 		expect(page.total_count).to eq '6'
 		expect(page.title.count).to eq 6

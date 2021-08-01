@@ -10,18 +10,22 @@ class RowContent < SitePrism::Section
 	end
 end
 
+class Sum < SitePrism::Section
+	element :aggregate_row, 'tbody'
+	elements :fan_growth_values, 'tbody [data-datapoint="lfm.audience_ratings.public_fan_acquisition_score"]'
+
+	def sum_aggregate
+		fan_growth_values.map { |value| value['title'].delete(',').to_i }.sum
+	end
+end
+
 class BrandList < SitePrism::Page
 	
-	elements :menu_items, 'div.item-label'
+	elements :brand_names, 'span.title-span'
 	element :headers, 'div.dataTables_info'
 	element :filter, '#brandsdatatable_filter input'
 	sections :rows, RowContent, 'tr.odd, tr.even'
-
-	def click_item(name)
-		item = menu_items.find {|el| el.text == name}		
-		item.click
-		sleep 5
-	end
+	sections :brands_table, Sum, 'table#brandsdatatable'
 
 	def brand?(brand)
 		rows.any?{|x| x.is_available?(brand)}
@@ -49,4 +53,9 @@ class BrandList < SitePrism::Page
 	def clear_filter
 		filter.set(nil)
 	end
+
+	def aggregate
+		brands_table.sum_aggregate
+	end
+
 end
