@@ -10,22 +10,13 @@ class RowContent < SitePrism::Section
 	end
 end
 
-class Sum < SitePrism::Section
-	element :aggregate_row, 'tbody'
-	elements :fan_growth_values, 'tbody [data-datapoint="lfm.audience_ratings.public_fan_acquisition_score"]'
-
-	def sum_aggregate
-		fan_growth_values.map { |value| value['title'].delete(',').to_i }.sum
-	end
-end
-
 class BrandList < SitePrism::Page
 	
 	elements :brand_names, 'span.title-span'
 	element :headers, 'div.dataTables_info'
 	element :filter, '#brandsdatatable_filter input'
 	sections :rows, RowContent, 'tr.odd, tr.even'
-	sections :brands_table, Sum, 'table#brandsdatatable'
+	elements :fan_growth, 'tbody [data-datapoint="lfm.audience_ratings.public_fan_acquisition_score"]'
 
 	def brand?(brand)
 		rows.any?{|x| x.is_available?(brand)}
@@ -54,8 +45,11 @@ class BrandList < SitePrism::Page
 		filter.set(nil)
 	end
 
-	def aggregate
-		brands_table.sum_aggregate
-	end
+	def fan_growth_sum_total
+		find('th.public_fan_acquisition_score div.brand-metrics')['data-sortvalue'].to_i
+	end	
 
+	def fan_growth_values
+		fan_growth.map { |value| value['title'].delete(',').to_i }.sum
+	end
 end
