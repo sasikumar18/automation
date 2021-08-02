@@ -7,7 +7,7 @@ describe 'Basic Features' do
 			obj.load
 			sleep 50
 			dashboard_url = 'https://explorer.stage.lfmprod.in/#dashboard/start'
-			obj.login('turneruser@turner.com', 'turnertest')
+			obj.login(:turner)
 			expect(obj.current_url).to eq(dashboard_url)
 		end
 	end
